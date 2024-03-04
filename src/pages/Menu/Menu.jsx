@@ -12,6 +12,8 @@ import masterCardLogo from '../../assets/images/master-card-logo.png'
 import applePayLogo from '../../assets/images/apple-pay-logo.png'
 import visaCardLogo from '../../assets/images/visa.png'
 
+import MenuItemCustomizeModal from "../../components/Modals/MenuItemCustomizeModal/MenuItemCustomizeModal";
+
 import { useSelector, useDispatch } from "react-redux";
 import {
   getMenu as onGetMenu,
