@@ -1,0 +1,145 @@
+._bottom-shadow {
+    box-shadow: 0px 2px 4px 898989;
+}
+
+._rounded-medium {
+    border-radius: 20px;
+}
+
+._cursor-pointer {
+    cursor: pointer;
+}
+
+._bg-light-voilet {
+    background-color: #3e4e88;
+}
+
+._text-light-green {
+    color: #12be14;
+}
+
+._obj-fit-cover {
+    object-fit: cover;
+}
+
+.sm-screen-component {
+    display: block;
+}
+
+.lg-screen-component {
+    display: none;
+}
+
+@media only screen and (min-width: 500px) {
+    .sm-screen-component {
+        display: none;
+    }
+
+    .lg-screen-component {
+        display: block;
+    }
+
+    header {
+        background: linear-gradient(0deg, rgb(155 49 37) 0%, rgb(122 93 54) 100%);
+    }
+    
+    header h4 {
+        font-weight: bold;
+    }
+    
+    header h2 {
+        font-weight: bold;
+        font-size: 3rem;
+    }
+    
+    header h3 {
+        font-size: 3rem;
+    }
+    
+    header h1 {
+        font-weight: bold;
+        font-size: 5rem;
+    }
+    
+    .header-gray {
+        color: #e5e5e5;
+    }
+    
+    .nav-info {
+        padding-right: 10rem;
+    }
+    
+    .left-category-container {
+        background-color: #ede9f3;
+        overflow-y: auto;
+    }
+
+    .left-category-container::-webkit-scrollbar {
+        display: none;
+    }
+    
+    .left-category-container-img {
+        height: 4rem;
+        width: 4rem;
+    }
+
+    .categories-contaier {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .category-scroll-down-btn {
+        bottom: 5rem;
+        background-color: #ede9f3;
+    }
+    
+    .menu-items-container {
+        min-height: calc(100vh - 7rem);
+        max-height: calc(100vh - 7rem);
+        overflow-y: scroll;
+    }
+    .menu-items-container::-webkit-scrollbar {
+        display: none;
+    }
+    
+    .menu-item-card {
+        background-color: #ede9f3;
+        border-radius: 1rem;
+    }
+    
+    .menu-item-img {
+        height: 15rem;
+    }
+    
+    .buy-now-buttton {
+        background-color: #983426;
+    }
+    
+    .foot-payment-button {
+        background-color: #b13f1a;
+    }
+    
+    .foot-bag-icon {
+        background-color: #4f218d;
+    }
+
+    header {
+        height: 7rem;
+    }
+
+    main {
+        min-height: calc(100vh - 7rem);
+        max-height: calc(100vh - 7rem);
+        flex: 1;
+    }
+
+    footer {
+        bottom: 0;
+        width: 100%;
+    }
+
+    .payment-methods-container {
+        width: 25rem;
+    }
+}

@@ -1,0 +1,14 @@
+.header-container {
+    /* background-image: url('../images/restaurant-bg.jpg'); */
+    height: 10rem;
+    background-size: cover; 
+    background-position: center;
+}
+
+.header-content {
+    background-color: rgb(137 127 115 / 81%);
+}
+
+.logo-name {
+    color: #e7dfd2;
+}

@@ -1,0 +1,37 @@
+._payment-container {
+    width: 50rem;
+}
+
+._bg-col-voilet {
+    background-color: #736cc5;
+}
+
+.extra-small-text {
+    font-size: 11px;
+}
+
+._font-s {
+    font-size: 10px;
+}
+
+._font-m {
+    font-size: 12px;
+}
+
+@media only screen and (min-width: 425px)  { 
+    .extra-small-text {
+        font-size: 13px;
+    }
+
+    ._font-s {
+        font-size: 15px;
+    }
+
+    ._font-m {
+        font-size: 17px;
+    }
+
+    ._font-l {
+        font-size: 20px;
+    }
+}
