@@ -268,7 +268,7 @@ const Menu = () => {
                   <Image className="_obj-fit-cover h-100 w-100 rounded-5" src='https://source.unsplash.com/random/?burger' />
                 </div>
                 <div className="d-flex justify-content-between">
-                  <h3 className="m-0 p-0">Burger</h3>
+                  <h3 className="m-0 p-0">{menu.name}</h3>
                   <p className="m-0 p-0">€5,00</p>
                 </div>
                 <div className="d-flex justify-content-between align-items-center">
@@ -296,14 +296,14 @@ const Menu = () => {
           </footer>
           </main>
           <Modal className="payment-option-modal" show={showPaymentModal} fullscreen={true} onHide={() => setShowPaymentModal(false)}>
-            <div className="d-flex justify-content-end p-2">
+            <div className="d-flex justify-content-end p-2  bg-dark ">
               <IoClose
-                className="_close-icon _z-index-2 rounded-circle bg-light _cursor-pointer"
+                className="_close-icon _z-index-2 rounded-circle _cursor-pointer text-light"
                 size={25}
                 onClick={()=>setShowPaymentModal(false)}
               />
             </div>
-            <Modal.Body className="bg-dark d-flex justify-content-center align-items-center">
+            <Modal.Body className="d-flex justify-content-center bg-dark align-items-center">
               <div className="payment-methods-container text-center">
                 <h2 className="text-light">Select Payment Method</h2>
                 <div onClick={() => handleSelectedPaymentModeClick('1')} className="bg-light rounded p-4 mt-4 cursor_pointer">

@@ -1,4 +1,4 @@
-import React from 'react'
+import {React, useState} from 'react'
 // import { Image } from 'react-bootstrap';
 import { RxCross2 } from "react-icons/rx";
 import { IoIosStar } from "react-icons/io";
@@ -11,6 +11,8 @@ import reviewData from './demoData'
 
 const Review = () => {
   const navigate = useNavigate();
+  const [assetId, setAssetId] = useState("");
+
 
   const handleBackClick = () => {
     navigate("/menu")

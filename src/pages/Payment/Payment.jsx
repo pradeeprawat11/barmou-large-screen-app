@@ -58,7 +58,7 @@ const Payment = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     // Add your logic for handling the form submission here
-    console.log("Form submitted:", formData);
+    // console.log("Form submitted:", formData);
   };
 
   const handleChange = (e) => {

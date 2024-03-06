@@ -28,6 +28,18 @@ header h1 {
     padding-right: 10rem;
 }
 
+.nav-language-icon {
+    width: 3rem;
+    height: 3rem;
+}
+
+.nav-img {
+    height: 6rem;
+    width: 6rem;
+    bottom: -1rem;
+    right: 1rem;
+}
+
 .left-category-container {
     background-color: #ede9f3;
     overflow-y: auto;
