@@ -205,9 +205,16 @@ const Menu = () => {
     setShow(false)
   }
 
+  const handleSelectedPaymentModeClick = (mode) => {
+    if(mode==='1') 
+      navigate("/payment");
+    else
+      navigate("/payment");
+  }
+
   return (
     <>
-      <div className="lg-screen-component h-100">
+      <div className="h-100">
           <header className="d-flex justify-content-between p-1 px-4">
             <div className="d-flex align-items-center">
               <div className="nav-language-icon rounded-circle overflow-hidden  _cursor-pointer">
@@ -299,7 +306,7 @@ const Menu = () => {
             <Modal.Body className="bg-dark d-flex justify-content-center align-items-center">
               <div className="payment-methods-container text-center">
                 <h2 className="text-light">Select Payment Method</h2>
-                <div className="bg-light rounded p-4 mt-4">
+                <div onClick={() => handleSelectedPaymentModeClick('1')} className="bg-light rounded p-4 mt-4 cursor_pointer">
                   <Row className="align-items-center">
                     <Col>
                       <Image className="_obj-fit-cover w-100 p-1" src={masterCardLogo} />
@@ -317,7 +324,7 @@ const Menu = () => {
                   <h5 className="p-0 m-0">PAY VIA CREDIT Card</h5>
                   <h5 className="p-0 m-0">Pay with Cash or Credit Card</h5>
                 </div>
-                <div className="bg-light rounded p-4 mt-4">
+                <div onClick={() => handleSelectedPaymentModeClick('2')} className="bg-light rounded p-4 mt-4 cursor_pointer">
                   <h5 className="p-0 m-0">PAY AT COUNTER</h5>
                   <h5 className="p-0 m-0">OR</h5>
                   <h5 className="p-0 m-0">YOUR WAITER</h5>
