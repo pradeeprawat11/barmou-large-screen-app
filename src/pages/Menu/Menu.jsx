@@ -287,9 +287,9 @@ const Menu = () => {
                 <div className="d-flex justify-content-between">
                   {isInCart(menu._id) ? 
                   <div className="border border-dark d-flex justify-content-evenly align-items-center">
-                    <span onClick={()=>handleDecreseFromCart(menu._id)} className="px-1">-</span>
+                    <span className="px-1" onClick={() => handleDecreseFromCart(menu._id)}>-</span>
                     <span className="px-3">{getQuantity(menu._id)}</span>   
-                    <span onClick={()=>handleAddToCart(menu._id)} className="px-1">+</span>
+                    <span className="px-1" onClick={() => handleAddToCart(menu)} >+</span>
                   </div>
                   :
                   <div className="buy-now-buttton rounded-3 p-1 d-flex align-items-center text-light">

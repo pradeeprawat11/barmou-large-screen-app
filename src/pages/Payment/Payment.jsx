@@ -423,7 +423,7 @@ const Payment = () => {
           </div>
         </div>
       </div>
-      <Modal show={true} fullscreen={true}>
+      <Modal show={show} fullscreen={true}>
         <Modal.Body className="d-flex align-items-center justify-content-center h-100">
           {!isOrderAccepted ? (
             <div className="text-center">
