@@ -26,6 +26,7 @@ import { IoIosArrowDown } from "react-icons/io";
 import RevoultIcon from "../../assets/images/revoult-icon.png";
 import { FaCheckCircle } from "react-icons/fa";
 import { ImCross } from "react-icons/im";
+import { IoBagCheckOutline } from "react-icons/io5";
 import Visa from "../../assets/images/visa.png";
 
 const Payment = () => {
@@ -422,14 +423,15 @@ const Payment = () => {
           </div>
         </div>
       </div>
-      <Modal show={show} fullscreen={true}>
+      <Modal show={true} fullscreen={true}>
         <Modal.Body className="d-flex align-items-center justify-content-center h-100">
-          {isOrderAccepted ? (
+          {!isOrderAccepted ? (
             <div className="text-center">
-              <FaCheckCircle size={40} className="_text-light-green" />
-              <h4 className="text-muted p-0 m-0 py-3">
-                Order Placed Successfully
-              </h4>
+              <IoBagCheckOutline size={150} className="_text-light-green" />
+              <h3 className="mt-3">Thank You!</h3>
+              <p>Your order is references ORID 188747393 please check your screen at front desk for pickup</p>
+              <h1 className="mt-4">K920</h1>
+              <button className='p-2 px-4 rounded bg_brown border-0 shadow-lg'><h2 className='m-0'>Thank You</h2></button>
             </div>
           ) : (
             <div className="text-center">

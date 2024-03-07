@@ -1,20 +1,31 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { IoChevronDownSharp } from "react-icons/io5";
 import { useNavigate } from "react-router-dom";
 import { Image } from 'react-bootstrap';
-import '../../assets/styles/Home.css'
+import './Home.css'
 import BarmouLogo from '../../assets/images/barmou-logo.png'
 import PlateLogo from '../../assets/images/plate-fastfood.png'
 
 const Home = () => {
   const navigate = useNavigate();
+  const [assetId, setAssetId] = useState();
+
+  useEffect(() => {
+    const currentUrl = window.location.href;
+    const urlSearchParams = new URLSearchParams(new URL(currentUrl).search);
+    const assetId = urlSearchParams.get("assetId");
+    setAssetId(assetId);
+    if (assetId !== localStorage.getItem("assetId")) {
+      localStorage.setItem("assetId", assetId);
+    }
+  }, [])
 
   const handleDineInClick = () => {
-    navigate("/menu");
+    navigate(`/menu?assetId=${assetId}`);
   };
 
   const handleTakeAwayClick = () => {
-    navigate("/menu");
+    navigate(`/menu?assetId=${assetId}`);
   };
 
   return (
@@ -27,7 +38,7 @@ const Home = () => {
             <IoChevronDownSharp className="header-gray mx-1" />
         </div>
         <div className='barmou-logo-container text-center'>
-            <Image className="h-100" src={BarmouLogo} />
+            <Image className="h-100 cursor_pointer" src={BarmouLogo} />
         </div>
         <h1>€<strong>3,00</strong></h1>
         <h4><strong>EAT & COFFEE</strong></h4>
@@ -35,9 +46,13 @@ const Home = () => {
             <button onClick={handleDineInClick} className='border-0 p-3 rounded-pill'><strong>Dine in</strong></button>
             <button onClick={handleTakeAwayClick} className='border-0 p-3 rounded-pill mx-3'><strong>Takeaway</strong></button>
         </div>
-        <h4><strong>1 Freddo Espresso</strong></h4>
-        <h4><strong>1 bagel</strong></h4>
-        <Image className='home-bg-food-image position-absolute' src={PlateLogo} />
+        <h4>
+            <strong>1 Freddo Espresso</strong>
+        </h4>
+        <h4>
+            <strong>1 bagel</strong>
+        </h4>
+        <Image onClick={handleDineInClick} className='home-bg-food-image position-absolute cursor_pointer' src={PlateLogo} />
     </div>
     </>
   )

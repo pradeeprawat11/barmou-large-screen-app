@@ -1,11 +1,10 @@
 import React, { useEffect, useState, Fragment } from "react";
 import "../../assets/styles/Menu.css";
 import { useNavigate } from "react-router-dom";
-import { Image, Dropdown, Modal, Card, Row, Col } from "react-bootstrap";
+import { Image, Modal, Row, Col } from "react-bootstrap";
 import { IoClose } from "react-icons/io5";
 import { CiEdit } from "react-icons/ci";
 import { PiHandbagSimple } from "react-icons/pi";
-import GrLogo from "../../assets/images/greece.png";
 import EnLogo from "../../assets/images/united-kingdom.png";
 import { IoChevronDownSharp } from "react-icons/io5";
 import masterCardLogo from '../../assets/images/master-card-logo.png'
@@ -54,6 +53,8 @@ const Menu = () => {
   const [assetIds, setAssetIds] = useState("");
   const [filterTerm, setFilterTerm] = useState('');
   const [videoShow, setVideoShow] = useState(false);
+
+  const [cutomizeModalData, setCutomizeModalData] = useState();
 
 
   useEffect(() => {
@@ -212,6 +213,14 @@ const Menu = () => {
       navigate("/payment");
   }
 
+  const handleMenuItemClick = (menu) => {
+    setCutomizeModalData(menu);
+  }
+
+  const handleCutomizeModalClose = () => {
+    setCutomizeModalData();
+  }
+
   return (
     <>
       <div className="h-100">
@@ -244,12 +253,12 @@ const Menu = () => {
                   <p>No Item</p>
                 ) : (
                   categories.map((category, index) => (
-                    <>
-                      <div key={index} className="left-category-container-img rounded-circle overflow-hidden  _cursor-pointer">
+                    <div  key={index} onClick={()=>handleCategoryClick(category)} >
+                      <div className="left-category-container-img rounded-circle overflow-hidden  _cursor-pointer">
                         <Image className="_obj-fit-cover h-100 w-100" src={category.image} />
                       </div>
                       <h6>{category.name}</h6>
-                    </>
+                    </div>
                   ))
                 ))}
               </div>
@@ -263,27 +272,29 @@ const Menu = () => {
                 <p>No Item</p>
               ) : (
                 filteredMenu.map((menu, index) => (
-              <Col lg={3} md={4} sm={6}  key={index} className="menu-item-card m-2 py-2">
-                <div className="menu-item-img rounded-5">
+              <Col key={index} lg={3} md={4} sm={6} className="menu-item-card m-2 py-2">
+                <div onClick={()=>handleMenuItemClick(menu)} className="menu-item-img rounded-5 cursor_pointer">
                   <Image className="_obj-fit-cover h-100 w-100 rounded-5" src='https://source.unsplash.com/random/?burger' />
                 </div>
-                <div className="d-flex justify-content-between">
+                <div onClick={()=>handleMenuItemClick(menu)} className="d-flex justify-content-between">
                   <h3 className="m-0 p-0">{menu.name}</h3>
                   <p className="m-0 p-0">€5,00</p>
                 </div>
-                <div className="d-flex justify-content-between align-items-center">
+                <div onClick={()=>handleMenuItemClick(menu)} className="d-flex justify-content-between align-items-center">
                   <p className="m-0 p-0">Single Patty Burger</p>
                   <CiEdit />
                 </div>
                 <div className="d-flex justify-content-between">
+                  {isInCart(menu._id) ? 
                   <div className="border border-dark d-flex justify-content-evenly align-items-center">
-                    <span className="px-1">-</span>
-                    <span className="px-3">1</span>
-                    <span className="px-1">+</span>
+                    <span onClick={()=>handleDecreseFromCart(menu._id)} className="px-1">-</span>
+                    <span className="px-3">{getQuantity(menu._id)}</span>   
+                    <span onClick={()=>handleAddToCart(menu._id)} className="px-1">+</span>
                   </div>
+                  :
                   <div className="buy-now-buttton rounded-3 p-1 d-flex align-items-center text-light">
-                    <h5 className="p-0 m-0">Buy Now</h5>
-                  </div>
+                    <h5 onClick={()=>handleAddToCart(menu)} className="p-0 m-0">Buy Now</h5>
+                  </div>}
                 </div>
               </Col>
                 ))
@@ -332,6 +343,9 @@ const Menu = () => {
               </div>
             </Modal.Body>
           </Modal>
+          {cutomizeModalData && 
+            <MenuItemCustomizeModal onClick={handleCutomizeModalClose} data={cutomizeModalData} />
+          }
       </div>
     </>
   );
