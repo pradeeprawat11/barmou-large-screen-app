@@ -425,7 +425,7 @@ const Payment = () => {
       </div>
       <Modal show={show} fullscreen={true}>
         <Modal.Body className="d-flex align-items-center justify-content-center h-100">
-          {!isOrderAccepted ? (
+          {isOrderAccepted ? (
             <div className="text-center">
               <IoBagCheckOutline size={150} className="_text-light-green" />
               <h3 className="mt-3">Thank You!</h3>

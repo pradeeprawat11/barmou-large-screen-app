@@ -253,11 +253,11 @@ const Menu = () => {
                   <p>No Item</p>
                 ) : (
                   categories.map((category, index) => (
-                    <div  key={index} onClick={()=>handleCategoryClick(category)} >
+                    <div  key={index} className="category-item-container" onClick={()=>handleCategoryClick(category)} >
                       <div className="left-category-container-img rounded-circle overflow-hidden  _cursor-pointer">
                         <Image className="_obj-fit-cover h-100 w-100" src={category.image} />
                       </div>
-                      <h6>{category.name}</h6>
+                      <h6 className="text-center">{category.name}</h6>
                     </div>
                   ))
                 ))}

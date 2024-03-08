@@ -1,4 +1,4 @@
-import {React, useState} from 'react'
+import {React, useState, useEffect} from 'react'
 // import { Image } from 'react-bootstrap';
 import { RxCross2 } from "react-icons/rx";
 import { IoIosStar } from "react-icons/io";
@@ -15,9 +15,12 @@ const Review = () => {
   const navigate = useNavigate();
   const [assetId, setAssetId] = useState("");
 
+  useEffect(() => {
+    setAssetId(localStorage.getItem("assetId"));
+  }, []);
 
   const handleBackClick = () => {
-    navigate("/menu")
+    navigate(`/menu?assetId=${assetId}`)
   }
   return (
     <>
@@ -38,8 +41,8 @@ const Review = () => {
         {reviewData.map((review, index) => (
           <div key={index} className='d-flex justify-content-between align-items-center my-3'>
             <div className='brand_logo_img_container'>
-              <Image className='h-100' src={review.image} />
-              {/* <h4 className='m-0'>{review.name}</h4> */}
+              {/* <Image className='h-100' src={review.image} /> */}
+              <h4 className='m-0'>{review.name}</h4>
             </div>
             <div>
               {Array.from({ length: review.review }, (_, i) => (
