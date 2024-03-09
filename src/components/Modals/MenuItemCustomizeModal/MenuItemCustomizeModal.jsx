@@ -4,22 +4,27 @@ import { IoClose } from "react-icons/io5";
 import { FaPlus } from "react-icons/fa6";
 import { FaMinus } from "react-icons/fa";
 import './MenuItemCustomizeModal.css'
+import { useNavigate } from 'react-router-dom';
 
 const MenuItemCustomizeModal = (props) => {
 
-  console.log(props);
+  const navigate = useNavigate();
+
+  const handlePaymentClick = () => {
+    navigate('/payment');
+  }
 
   return (
     <>
     <Modal show={props.data ? true : false} fullscreen={true}>
-    <div className="_model-img-container position-relative">
+    <div className="_model-img-container position-relative text-center">
       <IoClose
         className="_close-icon _z-index-2 rounded-circle bg-light position-absolute p-0 _cursor-pointer"
         size={25}
         onClick={props.onClick}
       />
       <Image
-        className="_obj-fit-cover h-100 w-100"
+        className="_obj-fit-cover h-100"
         src={props.data.image}
         fluid
       />
@@ -72,12 +77,13 @@ const MenuItemCustomizeModal = (props) => {
       </div>
       <footer className="d-flex justify-content-between align-items-center p-3 position-absolute bg-light">
         <h4 onClick={props.onClick} className='cursor_pointer'>Back</h4>
-        <div className="foot-payment-button p-2 rounded-pill text-light px-3"> <h4 className="p-0 m-0"> Continue To Payment </h4></div>
+        {props.menuFunctionProps.isInCart(props.data._id) &&
+        <div onClick={handlePaymentClick} className="foot-payment-button p-2 rounded-pill text-light px-3 cursor_pointer"> <h4 className="p-0 m-0"> Continue To Payment </h4></div>}
         {props.menuFunctionProps.isInCart(props.data._id) ?
         <div className='d-flex align-items-center'>
-          <FaMinus onClick={()=>props.menuFunctionProps.handleDecreseFromCart(props.data._id)} className='mx-2 bg_brown rounded-circle p-1 text-light cursor_pointer' size={20} />
+          <FaMinus onClick={()=>props.menuFunctionProps.handleDecreseFromCart(props.data._id)} className='mx-2 bg_red rounded-circle p-1 text-light cursor_pointer' size={20} />
           <p className='m-0 mx-2'>{props.menuFunctionProps.getQuantity(props.data._id)}</p>
-          <FaPlus onClick={()=>props.menuFunctionProps.handleAddToCart(props.data)} className='mx-2 bg_brown rounded-circle p-1 text-light cursor_pointer' size={20} />
+          <FaPlus onClick={()=>props.menuFunctionProps.handleAddToCart(props.data)} className='mx-2 bg_red rounded-circle p-1 text-light cursor_pointer' size={20} />
           <p size={10} className='m-0 mx-2'>
             {(props.menuFunctionProps.getQuantity(props.data._id) * props.data.price % 1) !== 0
             ? (props.menuFunctionProps.getQuantity(props.data._id) * props.data.price).toFixed(2)

@@ -255,39 +255,44 @@ const Menu = () => {
                 <p>No Item</p>
               ) : (
                 filteredMenu.map((menu, index) => (
-              <Col key={index} lg={3} md={4} sm={6} className="menu-item-card m-2 py-2">
+              <Col key={index} lg={3} md={4} sm={6} className="menu-item-card d-flex flex-column justify-content-between m-2 py-2">
                 <div onClick={()=>handleMenuItemClick(menu)} className="menu-item-img rounded-5 cursor_pointer">
                   <Image className="_obj-fit-cover h-100 w-100 rounded-5" src='https://source.unsplash.com/random/?burger' />
                 </div>
-                <div onClick={()=>handleMenuItemClick(menu)} className="d-flex justify-content-between">
-                  <h3 className="m-0 p-0">{menu.name}</h3>
-                  <p className="m-0 p-0">€5,00</p>
-                </div>
-                <div onClick={()=>handleMenuItemClick(menu)} className="d-flex justify-content-between align-items-center">
-                  <p className="m-0 p-0">Single Patty Burger</p>
-                  <CiEdit />
-                </div>
-                <div className="d-flex justify-content-between cursor_pointer">
-                  {isInCart(menu._id) ? 
-                  <div className="border border-dark d-flex justify-content-evenly align-items-center">
-                    <span className="px-1" onClick={() => handleDecreseFromCart(menu._id)}>-</span>
-                    <span className="px-3">{getQuantity(menu._id)}</span>   
-                    <span className="px-1" onClick={() => handleAddToCart(menu)} >+</span>
-                  </div>
-                  :
-                  <div className="buy-now-buttton rounded-3 p-1 d-flex align-items-center text-light">
-                    <h5 onClick={() => handleAddToCart(menu)} className="p-0 m-0">Buy Now</h5>
-                  </div>}
-                </div>
+                  <div className="d-flex flex-column justify-content-between h-100">
+                    <div>
+                      <div onClick={()=>handleMenuItemClick(menu)} className="d-flex justify-content-between">
+                        <h3 className="m-0 p-0">{menu.name}</h3>
+                        <p className="m-0 p-0">€5,00</p>
+                      </div>
+                      <div onClick={()=>handleMenuItemClick(menu)} className="d-flex justify-content-between align-items-center">
+                        <p className="m-0 p-0">Single Patty Burger</p>
+                        <CiEdit />
+                      </div>
+                    </div>
+                    <div className="cursor_pointer">
+                      {isInCart(menu._id) ? 
+                      <div className="border w-100 border-dark d-flex justify-content-evenly align-items-center">
+                        <span className="px-1" onClick={() => handleDecreseFromCart(menu._id)}>-</span>
+                        <span className="px-3">{getQuantity(menu._id)}</span>   
+                        <span className="px-1" onClick={() => handleAddToCart(menu)} >+</span>
+                      </div>
+                      :
+                      <div className="buy-now-buttton w-100 rounded-3 p-1 d-flex align-items-center justify-content-center text-light">
+                        <h5 onClick={() => handleAddToCart(menu)} className="p-0 m-0">Buy Now</h5>
+                      </div>}
+                    </div>
+                  </div>  
               </Col>
                 ))
               ))}
             </Row>
+          {cartItems.length>0 &&
           <footer className="d-flex justify-content-between align-items-center p-3 position-absolute bg-light">
             <h4 onClick={handleBackClick} className="cursor_pointer">Back</h4>
             <div onClick={() => setShowPaymentModal(true)}  className="foot-payment-button p-2 rounded-pill text-light px-3 cursor_pointer"> <h4 className="p-0 m-0"> Continue To Payment </h4></div>
             <PiHandbagSimple onClick={handleCartClick} className="foot-bag-icon border-rounded rounded-circle p-2 text-light cursor_pointer" size={50} />
-          </footer>
+          </footer>}
           </main>
          
           {showPaymentModal && 
