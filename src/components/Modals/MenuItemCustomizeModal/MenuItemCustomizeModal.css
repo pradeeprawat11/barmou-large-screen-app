@@ -45,3 +45,9 @@
     width: 1rem;
     height: 1rem;
 }
+
+.modal_body {
+    background-color: #ffffff !important;
+    border-top-left-radius: 30px;
+    border-top-right-radius: 30px;
+}

@@ -1,20 +1,16 @@
-import {React, useEffect, useState} from 'react'
-import { Modal, Card, Image } from 'react-bootstrap'
-
+import {React} from 'react'
+import { Modal, Image } from 'react-bootstrap'
 import { IoClose } from "react-icons/io5";
-import { LuSquareDot } from "react-icons/lu";
-import { FaRegDotCircle } from "react-icons/fa";
-import { PiHandbagSimple } from "react-icons/pi";
 import { FaPlus } from "react-icons/fa6";
 import { FaMinus } from "react-icons/fa";
-// import { FaMinus } from "react-icons/fa6";
-
-
 import './MenuItemCustomizeModal.css'
 
 const MenuItemCustomizeModal = (props) => {
 
+  console.log(props);
+
   return (
+    <>
     <Modal show={props.data ? true : false} fullscreen={true}>
     <div className="_model-img-container position-relative">
       <IoClose
@@ -28,9 +24,9 @@ const MenuItemCustomizeModal = (props) => {
         fluid
       />
     </div>
-    <Modal.Body className="d-flex justify-content-center">
+    <Modal.Body className="modal_body d-flex justify-content-center">
       <div className='_model-content text-center'>
-        <h1 classname=""> <strong>Classic Burger</strong></h1>
+        <h1> <strong>Classic Burger</strong></h1>
         <h6>Classic bread with pattie of two slices</h6>
         <div className='d-flex justify-content-between mt-3'>
           <div className='d-flex align-items-center'>
@@ -75,17 +71,27 @@ const MenuItemCustomizeModal = (props) => {
         </div>
       </div>
       <footer className="d-flex justify-content-between align-items-center p-3 position-absolute bg-light">
-        <h4>Back</h4>
+        <h4 onClick={props.onClick} className='cursor_pointer'>Back</h4>
         <div className="foot-payment-button p-2 rounded-pill text-light px-3"> <h4 className="p-0 m-0"> Continue To Payment </h4></div>
+        {props.menuFunctionProps.isInCart(props.data._id) ?
         <div className='d-flex align-items-center'>
-          <FaMinus className='mx-2 bg_brown rounded-circle p-1 text-light cursor_pointer' size={20} />
-          <p className='m-0 mx-2'>1</p>
-          <FaPlus className='mx-2 bg_brown rounded-circle p-1 text-light cursor_pointer' size={20} />
-          <p size={10} className='m-0 mx-2'>3.95</p>
-        </div>
+          <FaMinus onClick={()=>props.menuFunctionProps.handleDecreseFromCart(props.data._id)} className='mx-2 bg_brown rounded-circle p-1 text-light cursor_pointer' size={20} />
+          <p className='m-0 mx-2'>{props.menuFunctionProps.getQuantity(props.data._id)}</p>
+          <FaPlus onClick={()=>props.menuFunctionProps.handleAddToCart(props.data)} className='mx-2 bg_brown rounded-circle p-1 text-light cursor_pointer' size={20} />
+          <p size={10} className='m-0 mx-2'>
+            {(props.menuFunctionProps.getQuantity(props.data._id) * props.data.price % 1) !== 0
+            ? (props.menuFunctionProps.getQuantity(props.data._id) * props.data.price).toFixed(2)
+            : props.menuFunctionProps.getQuantity(props.data._id) * props.data.price}
+          </p>
+        </div> 
+        :
+        <div className="buy-now-buttton rounded-3 p-1 d-flex align-items-center text-light">
+          <h5 onClick={()=>props.menuFunctionProps.handleAddToCart(props.data)} className="p-0 m-0">Buy Now</h5>
+        </div>}
       </footer>
     </Modal.Body>
   </Modal>
+  </>
   )
 }
 

@@ -1,18 +1,11 @@
-import React, { useEffect, useState, Fragment } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import "../../assets/styles/Menu.css";
 import { useNavigate } from "react-router-dom";
-import { Image, Modal, Row, Col } from "react-bootstrap";
-import { IoClose } from "react-icons/io5";
+import { Image, Row, Col } from "react-bootstrap";
 import { CiEdit } from "react-icons/ci";
 import { PiHandbagSimple } from "react-icons/pi";
-import EnLogo from "../../assets/images/united-kingdom.png";
 import { IoChevronDownSharp } from "react-icons/io5";
-import masterCardLogo from '../../assets/images/master-card-logo.png'
-import applePayLogo from '../../assets/images/apple-pay-logo.png'
-import visaCardLogo from '../../assets/images/visa.png'
-
 import MenuItemCustomizeModal from "../../components/Modals/MenuItemCustomizeModal/MenuItemCustomizeModal";
-
 import { useSelector, useDispatch } from "react-redux";
 import {
   getMenu as onGetMenu,
@@ -21,8 +14,9 @@ import {
   getAssetInfo as onGetAssetInfo,
 } from "../../slices/thunks";
 import { addToCart, decreaseFromCart } from "../../slices/Cart/reducer";
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import PaymentModeModal from "../../components/Modals/PaymentModeModal/PaymentModeModal";
 
 const Menu = () => {
   const { menu, menuAddUpdate, categories, categoriesAddUpdate, cartItems, asset } =
@@ -43,19 +37,14 @@ const Menu = () => {
   const [page, setPage] = useState(1);
   const [menuList, setMenuList] = useState([]);
   const [selectedCategoryId, setSelectedCategoryId] = useState("");
-  const [selectedLogo, setSelectedLogo] = useState(EnLogo);
   const [show, setShow] = useState(false);
   const [showPaymentModal, setShowPaymentModal] = useState(false);
-  const [addBtnStyle, setAddBtnStyle] = useState("d-none");
-  const [itemCaptionStyle, setItemCaptionStyle] = useState("d-block");
   const [modelItem, setModelItem] = useState({});
   const [modelSetting, setModelSetting] = useState(false);
   const [assetIds, setAssetIds] = useState("");
   const [filterTerm, setFilterTerm] = useState('');
-  const [videoShow, setVideoShow] = useState(false);
-
   const [cutomizeModalData, setCutomizeModalData] = useState();
-
+  const containerRef = useRef(null);
 
   useEffect(() => {
     const currentUrl = window.location.href;
@@ -78,11 +67,6 @@ const Menu = () => {
 
   }, [dispatch, menuAddUpdate, categoriesAddUpdate]);
 
-  useEffect(() => {
-    window.addEventListener("scroll", handlePaggination);
-    return () => window.removeEventListener("scroll", handlePaggination);
-  }, []);
-
   setTimeout(function () {
     if (asset.length > 0) {
       localStorage.setItem("assetInfoData", JSON.stringify(asset[0]));
@@ -98,7 +82,7 @@ const Menu = () => {
       if (menu && menu.length > 0 && menuList)
         setMenuList((prevItems) => [...prevItems, ...menu]);
     }
-  }, [menu, page]);
+  }, [menu]);
 
   useEffect(() => {
     const assetId = localStorage.getItem("assetId");
@@ -111,11 +95,13 @@ const Menu = () => {
     );
   }, [page, dispatch, selectedCategoryId]);
 
-  const handlePaggination = async () => {
+  const handlePaggination = async (containerRef) => {
     try {
       if (
-        window.innerHeight + document.documentElement.scrollTop + 1 >=
-        document.documentElement.scrollHeight
+        containerRef &&
+        containerRef.current &&
+        containerRef.current.scrollTop + containerRef.current.clientHeight + 1 >=
+        containerRef.current.scrollHeight
       ) {
         setPage((prev) => prev + 1);
       }
@@ -125,7 +111,17 @@ const Menu = () => {
   };
 
   useEffect(() => {
+    const handleScroll = () => handlePaggination(containerRef);
 
+    if (containerRef.current) {
+      containerRef.current.addEventListener("scroll", handleScroll);
+    }
+
+    return () => {
+      if (containerRef.current) {
+        containerRef.current.removeEventListener("scroll", handleScroll);
+      }
+    };
   }, []);
 
   const handleCategoryClick = (event) => {
@@ -154,8 +150,7 @@ const Menu = () => {
 
   const handleAddToCart = (item) => {
     if (!isInCart(item._id)) {
-      setModelItem(item);
-      setShow(true);
+      setCutomizeModalData(item);
     }
     dispatch(addToCart(item));
   };
@@ -178,39 +173,20 @@ const Menu = () => {
     return cartItems[itemIndex].quantity;
   };
 
-  const handleItemOver = () => {
-    setItemCaptionStyle("d-none");
-    setAddBtnStyle("d-block");
-  };
-
-  const handleItemOut = () => {
-    setItemCaptionStyle("d-block");
-    setAddBtnStyle("d-none");
-  };
-
-  const handleViewCartClick = () => {
+  const handleCartClick = () => {
     navigate("/payment");
   };
 
-  // Filter the data based on filterTerm
+  const handleBackClick = () => {
+    navigate(`/?assetId=${assetIds}`);
+  };
+
   let filteredMenu = [];
   if (menuList){
      filteredMenu = menuList.filter((item) => {
       const matchesSearchTerm = item.name.toLowerCase().includes(filterTerm.toLowerCase());
       return matchesSearchTerm;
     });
-  }
-
-  const handleModalClose = () => {
-    setVideoShow(false)
-    setShow(false)
-  }
-
-  const handleSelectedPaymentModeClick = (mode) => {
-    if(mode==='1') 
-      navigate("/payment");
-    else
-      navigate("/payment");
   }
 
   const handleMenuItemClick = (menu) => {
@@ -220,6 +196,13 @@ const Menu = () => {
   const handleCutomizeModalClose = () => {
     setCutomizeModalData();
   }
+
+  const menuFunctionProps = {
+    getQuantity: getQuantity,
+    handleAddToCart: handleAddToCart,
+    handleDecreseFromCart: handleDecreseFromCart,
+    isInCart: isInCart,
+  };
 
   return (
     <>
@@ -266,7 +249,7 @@ const Menu = () => {
                 <IoChevronDownSharp className="foot-bag-icon border-rounded rounded-circle p-2 text-light" size={50} />
               </div>
             </div>
-            <Row className="menu-items-container justify-content-evenly m-0 w-100">
+            <Row ref={containerRef} className="menu-items-container justify-content-evenly m-0 w-100">
             {
               (filteredMenu.length === 0 ? (
                 <p>No Item</p>
@@ -284,7 +267,7 @@ const Menu = () => {
                   <p className="m-0 p-0">Single Patty Burger</p>
                   <CiEdit />
                 </div>
-                <div className="d-flex justify-content-between">
+                <div className="d-flex justify-content-between cursor_pointer">
                   {isInCart(menu._id) ? 
                   <div className="border border-dark d-flex justify-content-evenly align-items-center">
                     <span className="px-1" onClick={() => handleDecreseFromCart(menu._id)}>-</span>
@@ -293,7 +276,7 @@ const Menu = () => {
                   </div>
                   :
                   <div className="buy-now-buttton rounded-3 p-1 d-flex align-items-center text-light">
-                    <h5 onClick={()=>handleAddToCart(menu)} className="p-0 m-0">Buy Now</h5>
+                    <h5 onClick={() => handleAddToCart(menu)} className="p-0 m-0">Buy Now</h5>
                   </div>}
                 </div>
               </Col>
@@ -301,50 +284,18 @@ const Menu = () => {
               ))}
             </Row>
           <footer className="d-flex justify-content-between align-items-center p-3 position-absolute bg-light">
-            <h4>Back</h4>
-            <div onClick={() => setShowPaymentModal(true)}  className="foot-payment-button p-2 rounded-pill text-light px-3"> <h4 className="p-0 m-0"> Continue To Payment </h4></div>
-            <PiHandbagSimple className="foot-bag-icon border-rounded rounded-circle p-2 text-light" size={50} />
+            <h4 onClick={handleBackClick} className="cursor_pointer">Back</h4>
+            <div onClick={() => setShowPaymentModal(true)}  className="foot-payment-button p-2 rounded-pill text-light px-3 cursor_pointer"> <h4 className="p-0 m-0"> Continue To Payment </h4></div>
+            <PiHandbagSimple onClick={handleCartClick} className="foot-bag-icon border-rounded rounded-circle p-2 text-light cursor_pointer" size={50} />
           </footer>
           </main>
-          <Modal className="payment-option-modal" show={showPaymentModal} fullscreen={true} onHide={() => setShowPaymentModal(false)}>
-            <div className="d-flex justify-content-end p-2  bg-dark ">
-              <IoClose
-                className="_close-icon _z-index-2 rounded-circle _cursor-pointer text-light"
-                size={25}
-                onClick={()=>setShowPaymentModal(false)}
-              />
-            </div>
-            <Modal.Body className="d-flex justify-content-center bg-dark align-items-center">
-              <div className="payment-methods-container text-center">
-                <h2 className="text-light">Select Payment Method</h2>
-                <div onClick={() => handleSelectedPaymentModeClick('1')} className="bg-light rounded p-4 mt-4 cursor_pointer">
-                  <Row className="align-items-center">
-                    <Col>
-                      <Image className="_obj-fit-cover w-100 p-1" src={masterCardLogo} />
-                    </Col>
-                    <Col>
-                      <Image className="_obj-fit-cover w-100 p-1" src={visaCardLogo} />
-                    </Col>
-                    <Col>
-                      <Image className="_obj-fit-cover w-100 p-1" src={applePayLogo} />
-                    </Col>
-                    <Col>
-                      <Image className="_obj-fit-cover w-100 p-1" src={masterCardLogo} />
-                    </Col>
-                  </Row>
-                  <h5 className="p-0 m-0">PAY VIA CREDIT Card</h5>
-                  <h5 className="p-0 m-0">Pay with Cash or Credit Card</h5>
-                </div>
-                <div onClick={() => handleSelectedPaymentModeClick('2')} className="bg-light rounded p-4 mt-4 cursor_pointer">
-                  <h5 className="p-0 m-0">PAY AT COUNTER</h5>
-                  <h5 className="p-0 m-0">OR</h5>
-                  <h5 className="p-0 m-0">YOUR WAITER</h5>
-                </div>
-              </div>
-            </Modal.Body>
-          </Modal>
+         
+          {showPaymentModal && 
+            <PaymentModeModal onClick={()=>setShowPaymentModal(false)}/>
+          }
+
           {cutomizeModalData && 
-            <MenuItemCustomizeModal onClick={handleCutomizeModalClose} data={cutomizeModalData} />
+            <MenuItemCustomizeModal onClick={handleCutomizeModalClose} menuFunctionProps={menuFunctionProps} data={cutomizeModalData} />
           }
       </div>
     </>

@@ -1,14 +1,8 @@
 import {React, useState, useEffect} from 'react'
-// import { Image } from 'react-bootstrap';
 import { RxCross2 } from "react-icons/rx";
 import { IoIosStar } from "react-icons/io";
-
-import '../../assets/styles/Review.css'
-
-import { Image } from 'react-bootstrap';
-
+import './Review.css'
 import { useNavigate } from "react-router-dom";
-
 import reviewData from './demoData'
 
 const Review = () => {
@@ -41,7 +35,6 @@ const Review = () => {
         {reviewData.map((review, index) => (
           <div key={index} className='d-flex justify-content-between align-items-center my-3'>
             <div className='brand_logo_img_container'>
-              {/* <Image className='h-100' src={review.image} /> */}
               <h4 className='m-0'>{review.name}</h4>
             </div>
             <div>

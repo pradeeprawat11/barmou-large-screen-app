@@ -1,6 +1,6 @@
 import React from "react";
 import { useEffect, useState } from "react";
-import { Image, Modal, Form } from "react-bootstrap";
+import { Image, Form } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import {
@@ -24,10 +24,8 @@ import Star from "../../assets/images/star.png";
 import BarmouLogo from "../../assets/images/barmou-logo.png";
 import { IoIosArrowDown } from "react-icons/io";
 import RevoultIcon from "../../assets/images/revoult-icon.png";
-import { FaCheckCircle } from "react-icons/fa";
-import { ImCross } from "react-icons/im";
-import { IoBagCheckOutline } from "react-icons/io5";
 import Visa from "../../assets/images/visa.png";
+import OrderSuccessMessageModal from "../../components/Modals/OrderSuccessMessageModal/OrderSuccessMessageModal";
 
 const Payment = () => {
   const { cartItems, cartTotalAmout, orderStatusCode, cart } = useSelector(
@@ -40,11 +38,9 @@ const Payment = () => {
   );
 
   const [assetId, setAssetId] = useState("");
-  // const [orderStatus, setOrderStatus] = useState(false);
   const [isOrderAccepted, setIsOrderAccepted] = useState(false);
   const [show, setShow] = useState(false);
   const [assetInfo, setAssetInfo] = useState('');
-  // const [spin, setSpin] = useState(false);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -58,8 +54,6 @@ const Payment = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Add your logic for handling the form submission here
-    // console.log("Form submitted:", formData);
   };
 
   const handleChange = (e) => {
@@ -91,15 +85,12 @@ const Payment = () => {
     if (orderStatusCode != null) {
       setShow(true);
       if (orderStatusCode === 200) {
-        // setOrderStatus(true);
         setIsOrderAccepted(true);
         dispatch(clearCart());
         const timeoutId = setTimeout(() => {
           dispatch(onResetOrderApiResponseFlag());
-          // navigate(`/menu?assetId=${assetId}`)
           navigate(`/review`);
         }, 2000);
-        // Cleanup the timeout to avoid memory leaks
         return () => clearTimeout(timeoutId);
       } else {
         const timeoutId = setTimeout(() => {
@@ -112,12 +103,10 @@ const Payment = () => {
     }
   }, [orderStatusCode, dispatch, assetId, navigate]);
 
-  // Handle Add To Cart
   const handleAddToCart = (item) => {
     dispatch(addToCart(item));
   };
 
-  // Handle Remove From Cart
   const handleDecreseFromCart = (id) => {
     dispatch(decreaseFromCart(id));
   };
@@ -127,7 +116,6 @@ const Payment = () => {
   };
 
   const handleAddOrder = (paymentMethod) => {
-    // setSpin(true);
     const orderData = {
       assetId: assetId,
       menu: cartItems,
@@ -149,7 +137,6 @@ const Payment = () => {
     <>
       <div className="d-flex justify-content-center p-4 px-lg-5">
         <div className="_payment-container">
-          {/* Navigation */}
           <div className="d-flex align-items-center">
             <FaArrowLeft
               onClick={handleBackClick}
@@ -158,7 +145,6 @@ const Payment = () => {
             />
             <h6 className="_font-l p-0 m-0 px-3">{(assetInfo.name) ? assetInfo.name : "BARMOU"}</h6>
           </div>
-          {/* items */}
           <div className="_bottom-shadow border _rounded-medium mt-4">
             <div className="p-2">
               {cartItems.map((item, index) => (
@@ -365,24 +351,7 @@ const Payment = () => {
                 </button>
               </div>
             </div>
-            {/* <div className="py-1 p-2">
-              <div className="d-flex cursor-pointer">
-                <div
-                  className="border p-1 d-flex justify-content-center align-items-center"
-                  style={{ width: "2rem", height: "2rem" }}
-                >
-                  <MdOutlineAddBox />
-                </div>
-                <div className="px-2">
-                  <h5 className="p-0 m-0 text-muted">Add New Card</h5>
-                  <p className="p-0 m-0 text-muted extra-small-text">
-                    Save and Pay Via Cards
-                  </p>
-                </div>
-              </div>
-            </div> */}
           </div>
-
           <h6 className="_font-l py-2">Review</h6>
           <div className="_bottom-shadow border _rounded-medium my-1 mt-2">
             <div className="py-1 p-2">
@@ -423,7 +392,7 @@ const Payment = () => {
           </div>
         </div>
       </div>
-      <Modal show={show} fullscreen={true}>
+      {/* <Modal show={show} fullscreen={true}>
         <Modal.Body className="d-flex align-items-center justify-content-center h-100">
           {isOrderAccepted ? (
             <div className="text-center">
@@ -443,7 +412,8 @@ const Payment = () => {
             </div>
           )}
         </Modal.Body>
-      </Modal>
+      </Modal> */}
+      {show && <OrderSuccessMessageModal isOrderAccepted={isOrderAccepted} />}
     </>
   );
 };
