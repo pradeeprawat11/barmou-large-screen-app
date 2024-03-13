@@ -1,6 +1,7 @@
 import React from "react";
 import { useEffect, useState } from "react";
-import { Image, Form } from "react-bootstrap";
+import { Image, Form, Button, InputGroup } from "react-bootstrap";
+import Collapse from 'react-bootstrap/Collapse';
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import {
@@ -14,26 +15,29 @@ import {
   resetOrderApiResponseFlag as onResetOrderApiResponseFlag,
   addNotification as onAddNotification,
 } from "../../slices/thunks";
-import { MdOutlineAddBox } from "react-icons/md";
+import { MdOutlineAddBox,MdDelete } from "react-icons/md";
 import { TbPointFilled } from "react-icons/tb";
 import { FaArrowLeft } from "react-icons/fa6";
 import "../../assets/styles/Payment.css";
 import "../../assets/styles/Global.css";
-import QRCode from "../../assets/images/qr.png";
-import Star from "../../assets/images/star.png";
-import BarmouLogo from "../../assets/images/barmou-logo.png";
 import { IoIosArrowDown } from "react-icons/io";
 import RevoultIcon from "../../assets/images/revoult-icon.png";
-import Visa from "../../assets/images/visa.png";
-import OrderSuccessMessageModal from "../../components/Modals/OrderSuccessMessageModal/OrderSuccessMessageModal";
+import AppleIcon from "../../assets/images/apple-pay.png";
+import GoogleIcon from "../../assets/images/google-pay.png";
+import CashIcon from "../../assets/images/wallet.png";
+import TipIcon from "../../assets/images/tip.png";
+import OrderSuccessMessageModal from '../../components/Modals/OrderSuccessMessageModal/OrderSuccessMessageModal'
 
 const Payment = () => {
-  const { cartItems, cartTotalAmout, orderStatusCode, cart } = useSelector(
+  const { cartItems, cartTotalAmout, orderStatusCode, cart, cartTotalVat, cardNetAmount,orderMessage } = useSelector(
     (state) => ({
       cart: state.cart,
       cartItems: state.cart.cartItems,
       cartTotalAmout: state.cart.cartTotalAmout,
+      cardNetAmount: state.cart.cardNetAmount,
+      cartTotalVat: state.cart.cartTotalVat,
       orderStatusCode: state.orders.orderStatusCode,
+      orderMessage: state.orders.orderMessage,
     })
   );
 
@@ -41,24 +45,25 @@ const Payment = () => {
   const [isOrderAccepted, setIsOrderAccepted] = useState(false);
   const [show, setShow] = useState(false);
   const [assetInfo, setAssetInfo] = useState('');
+  const [ordersMessage, setOrderMessage] = useState('');
+  const [instruction, setInstruction] = useState('');
+  const [tipsData, setTipAmount] = useState({});
+  const [open, setOpen] = useState(false);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const [formData, setFormData] = useState({
-    cardNumber: "",
-    cardHolder: "",
-    expirationDate: "",
-    cvv: "",
-  });
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const getInstructions = (e) => {
+    setInstruction(e)
   };
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+  const addTip = (tip,totaAmount) => {
+    let tipAmount = (totaAmount*tip)/100;
+    setTipAmount({tip:tip,tipAmount:tipAmount,totaAmount:totaAmount+tipAmount})
+  };
+
+  const removeTip = (tip,totaAmount) => {
+    setTipAmount({})
   };
 
   useEffect(() => {
@@ -71,13 +76,13 @@ const Payment = () => {
 
   useEffect(() => {
     let assetInfo = localStorage.getItem("assetInfoData");
-    if(assetInfo){
+    if (assetInfo) {
       setAssetInfo(JSON.parse(assetInfo));
       assetInfo = JSON.parse(assetInfo);
       if (assetInfo.venueInfo.setting !== undefined)
-      if(!assetInfo.venueInfo.setting.modelB){
-        navigate(`/menu?assetId=${localStorage.getItem("assetId")}`);
-      }
+        if (!assetInfo.venueInfo.setting.modelB) {
+          navigate(`/menu?assetId=${localStorage.getItem("assetId")}`);
+        }
     }
   }, [navigate]);
 
@@ -85,18 +90,21 @@ const Payment = () => {
     if (orderStatusCode != null) {
       setShow(true);
       if (orderStatusCode === 200) {
+        setOrderMessage(orderMessage);
         setIsOrderAccepted(true);
         dispatch(clearCart());
         const timeoutId = setTimeout(() => {
           dispatch(onResetOrderApiResponseFlag());
           navigate(`/review`);
         }, 2000);
+        // Cleanup the timeout to avoid memory leaks
         return () => clearTimeout(timeoutId);
       } else {
+        setOrderMessage(orderMessage);
         const timeoutId = setTimeout(() => {
           dispatch(onResetOrderApiResponseFlag());
           navigate(`/menu?assetId=${assetId}`);
-        }, 2000);
+        }, 3000);
 
         return () => clearTimeout(timeoutId);
       }
@@ -120,6 +128,8 @@ const Payment = () => {
       assetId: assetId,
       menu: cartItems,
       paymentMethod: paymentMethod,
+      tip:(!isNaN(tipsData.tip)) ? tipsData.tip : 0,
+      instruction:instruction
     };
     dispatch(onAddOrder(orderData));
     let payload = {
@@ -137,13 +147,14 @@ const Payment = () => {
     <>
       <div className="d-flex justify-content-center p-4 px-lg-5">
         <div className="_payment-container">
+          {/* Navigation */}
           <div className="d-flex align-items-center">
             <FaArrowLeft
               onClick={handleBackClick}
               size={20}
               className="text-muted _cursor-pointer"
             />
-            <h6 className="_font-l p-0 m-0 px-3">{(assetInfo.name) ? assetInfo.name : "BARMOU"}</h6>
+            <h6 className="_font-l p-0 m-0 px-3">{(assetInfo.name) ? assetInfo.name : "AwinSoft"}</h6>
           </div>
           <div className="_bottom-shadow border _rounded-medium mt-4">
             <div className="p-2">
@@ -204,44 +215,102 @@ const Payment = () => {
             </div>
             <div className="d-flex justify-content-between p-2 border-top text-muted cursor-pointer _cursor-pointer">
               <div className="px-3">
-                <span className="_font-m">Add Instructions</span>
+                <span className="_font-m" onClick={() => setOpen(!open)}  aria-expanded={open}>Add Instructions</span>
+              </div>
+              <Collapse in={open}>
+                <InputGroup className="mb-3">
+                  <InputGroup.Text id="inputGroup-sizing-default">
+                  Instructions
+                  </InputGroup.Text>
+                  <Form.Control  as="textarea" onChange={(event) => getInstructions(event.target.value)}
+                    aria-label="Default"
+                    placeholder="Leave a instructions here"
+                    aria-describedby="inputGroup-sizing-default"
+                  />
+                </InputGroup>
+            </Collapse>
+              <div>
+                <MdOutlineAddBox  onClick={() => setOpen(!open)}  aria-expanded={open} />
+              </div>
+            </div>
+            <div className="d-flex justify-content-between p-2 border-top text-muted cursor-pointer _cursor-pointer">
+              <div
+                className="border p-1 d-flex justify-content-center align-items-center"
+                style={{ width: "2rem", height: "2rem" }}
+              >
+                <Image className="" src={TipIcon} fluid />
+              </div>
+              <div className="px-3">
+                <span className="_font-m">Say thanks with a Tip</span>
+                <div className="_font-m"> <Button onClick={() => addTip(2,cartTotalAmout)}
+                  variant="success"
+                  size="sm"
+                >
+                  2 %
+                </Button>{' '}
+                  <Button onClick={() => addTip(5,cartTotalAmout)}
+                    variant="success"
+                    size="sm"
+                  >
+                    5 %
+                  </Button>{' '}
+                  <Button onClick={() => addTip(10,cartTotalAmout)}
+                    variant="success"
+                    size="sm"
+                  >
+                    10 %
+                  </Button>{' '}<Button onClick={() => addTip(15,cartTotalAmout)}
+                    variant="success"
+                    size="sm"
+                  >
+                    15 %
+                  </Button></div>
               </div>
               <div>
                 <MdOutlineAddBox />
               </div>
             </div>
           </div>
-
-          {/* Bill Details */}
           <h6 className="py-2 _font-l">Bill Details</h6>
           <div className="_bottom-shadow border _rounded-medium">
             <div className="d-flex justify-content-between p-2 px-4">
-              <h6 className="p-0 m-0 text-muted">Items Total</h6>
+              <h6 className="p-0 m-0 text-muted">Items Net Value</h6>
               <h6 className="p-0 m-0">
                 &#8364;{" "}
-                {cartTotalAmout % 1 !== 0
-                  ? cartTotalAmout.toFixed(2)
-                  : cartTotalAmout}
+                {cardNetAmount}
               </h6>
             </div>
             <div className="d-flex justify-content-between p-2 px-4">
               <h6 className="p-0 m-0 text-muted">
-                Taxes and Restaurant Charges
+                Vat and Restaurant Charges
               </h6>
-              <h6 className="p-0 m-0">&#8364; 0</h6>
+              <h6 className="p-0 m-0">&#8364; {cartTotalVat}</h6>
+            </div>
+            <div className="d-flex justify-content-between p-2 px-4">
+              <h6 className="p-0 m-0 text-muted">
+                Tip {tipsData.tip}%
+                {(!isNaN(tipsData.tip)) ? 
+                    <Button onClick={() => removeTip(tipsData.tip,(Math.floor(tipsData.tipAmount * 100) / 100))}
+                    variant="danger"
+                    size="sm"
+                  >
+                    <MdDelete />
+                  </Button>
+                  : ""}
+              </h6>
+              <h6 className="p-0 m-0">&#8364; {(!isNaN(tipsData.tipAmount)) ? (Math.floor(tipsData.tipAmount * 100) / 100): 0}</h6>
             </div>
             <div className="d-flex justify-content-between p-2 border-top px-4">
               <h6>To Pay</h6>
-              <h6>
+              <h6 className="fw-bold">
                 &#8364;{" "}
-                {cartTotalAmout % 1 !== 0
-                  ? cartTotalAmout.toFixed(2)
-                  : cartTotalAmout}
+                {(!isNaN(tipsData.tipAmount))
+                  ? (Math.floor(tipsData.totaAmount * 100) / 100) 
+                  : cartTotalAmout.toFixed(2)}
               </h6>
             </div>
-          </div>
 
-          {/* Online Payment */}
+          </div>
           <h6 className="_font-l py-2">Online Payment</h6>
           <div className="_bottom-shadow border _rounded-medium my-1">
             <div
@@ -269,151 +338,123 @@ const Payment = () => {
                   <MdOutlineAddBox />
                 </div>
                 <div className="px-2">
-                  <h5 className="p-0 m-0 _font-m">Add New</h5>
                   <p className="p-0 m-0 _font-s">
-                    You need to have a registered Payment Method
+                    Click here to pay
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="_bottom-shadow border _rounded-medium my-1">
+            <div
+              onClick={() => handleAddOrder("RevolutPay")}
+              className="py-1 p-2 _cursor-pointer"
+            >
+              <div className="d-flex cursor-pointer">
+                <div
+                  className="border p-1 d-flex justify-content-center align-items-center"
+                  style={{ width: "2rem", height: "2rem" }}
+                >
+                  <Image className="" src={AppleIcon} fluid />
+                </div>
+                <div className="d-flex justify-content-center align-items-center">
+                  <h5 className="p-0 m-0 px-2 text-muted">Apple</h5>
+                </div>
+              </div>
+            </div>
+            <div className="border-top py-1 p-2">
+              <div className="d-flex cursor-pointer">
+                <div
+                  className="border p-1 d-flex justify-content-center align-items-center"
+                  style={{ width: "2rem", height: "2rem" }}
+                >
+                  <MdOutlineAddBox />
+                </div>
+                <div className="px-2">
+                  <p className="p-0 m-0 _font-s">
+                    Click here to pay
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="_bottom-shadow border _rounded-medium my-1">
+            <div
+              onClick={() => handleAddOrder("RevolutPay")}
+              className="py-1 p-2 _cursor-pointer"
+            >
+              <div className="d-flex cursor-pointer">
+                <div
+                  className="border p-1 d-flex justify-content-center align-items-center"
+                  style={{ width: "2rem", height: "2rem" }}
+                >
+                  <Image className="" src={GoogleIcon} fluid />
+                </div>
+                <div className="d-flex justify-content-center align-items-center">
+                  <h5 className="p-0 m-0 px-2 text-muted">Google</h5>
+                </div>
+              </div>
+            </div>
+            <div className="border-top py-1 p-2">
+              <div className="d-flex cursor-pointer">
+                <div
+                  className="border p-1 d-flex justify-content-center align-items-center"
+                  style={{ width: "2rem", height: "2rem" }}
+                >
+                  <MdOutlineAddBox />
+                </div>
+                <div className="px-2">
+                  <p className="p-0 m-0 _font-s">
+                    Click here to pay
                   </p>
                 </div>
               </div>
             </div>
           </div>
 
-          {/* Credit Card */}
-          <h6 className="_font-l py-2">Card Payment</h6>
           <div className="_bottom-shadow border _rounded-medium my-1">
-            <div className="d-flex p-2 cursor-pointer">
-              <div
-                className="border d-flex justify-content-center align-items-center overflow-hidden"
-                style={{ width: "2rem", height: "2rem" }}
-              >
-                <Image className="h-100" src={Visa} />
-              </div>
-              <div className="d-flex justify-content-center align-items-center">
-                <h5 className="p-0 m-0 px-2 text-muted">Visa Payment</h5>
-              </div>
-            </div>
-            <div className="p-2 ">
-              <Form className="" onSubmit={handleSubmit}>
-                <Form.Group controlId="cardNumber">
-                  <Form.Label>Card Number</Form.Label>
-                  <Form.Control
-                    type="text"
-                    name="cardNumber"
-                    value={formData.cardNumber}
-                    onChange={handleChange}
-                    placeholder="1234 5678 9012 3456"
-                    required
-                  />
-                </Form.Group>
-
-                <Form.Group controlId="cardHolder">
-                  <Form.Label>Cardholder Name</Form.Label>
-                  <Form.Control
-                    type="text"
-                    name="cardHolder"
-                    value={formData.cardHolder}
-                    onChange={handleChange}
-                    placeholder="John Doe"
-                    required
-                  />
-                </Form.Group>
-
-                <Form.Group controlId="expirationDate">
-                  <Form.Label>Expiration Date</Form.Label>
-                  <Form.Control
-                    type="text"
-                    name="expirationDate"
-                    value={formData.expirationDate}
-                    onChange={handleChange}
-                    placeholder="MM/YY"
-                    required
-                  />
-                </Form.Group>
-
-                <Form.Group controlId="cvv">
-                  <Form.Label>CVV</Form.Label>
-                  <Form.Control
-                    type="text"
-                    name="cvv"
-                    value={formData.cvv}
-                    onChange={handleChange}
-                    placeholder="123"
-                    required
-                  />
-                </Form.Group>
-              </Form>
-              <div className="d-flex justify-content-center mt-2">
-                <button
-                  className="_bg-col-voilet text-light rounded border-0 py-1"
-                  onClick={() => handleAddOrder("CashPay")}
+            <div
+              onClick={() => handleAddOrder("CashPay")}
+              className="py-1 p-2 _cursor-pointer"
+            >
+              <div className="d-flex cursor-pointer">
+                <div
+                  className="border p-1 d-flex justify-content-center align-items-center"
+                  style={{ width: "2rem", height: "2rem" }}
                 >
-                  Pay Now
-                </button>
+                  <Image className="" src={CashIcon} fluid />
+                </div>
+                <div className="d-flex justify-content-center align-items-center">
+                  <h5 className="p-0 m-0 px-2 text-muted">Cash</h5>
+                </div>
               </div>
             </div>
-          </div>
-          <h6 className="_font-l py-2">Review</h6>
-          <div className="_bottom-shadow border _rounded-medium my-1 mt-2">
-            <div className="py-1 p-2">
-              <div className="d-flex justify-content-between align-items-center ">
-                <div className="">
-                  <h6 className="p-0 m-0">Review Us On Google</h6>
-                  <div className="d-flex">
-                    <div style={{ height: "8px", width: "8px" }}>
-                      <Image className="w-100" src={Star} fluid />
-                    </div>
-                    <div style={{ height: "8px", width: "8px" }}>
-                      <Image className="w-100" src={Star} fluid />
-                    </div>
-                    <div style={{ height: "8px", width: "8px" }}>
-                      <Image className="w-100" src={Star} fluid />
-                    </div>
-                    <div style={{ height: "8px", width: "8px" }}>
-                      <Image className="w-100" src={Star} fluid />
-                    </div>
-                    <div style={{ height: "8px", width: "8px" }}>
-                      <Image className="w-100" src={Star} fluid />
-                    </div>
-                  </div>
+            <div className="border-top py-1 p-2">
+              <div className="d-flex cursor-pointer">
+                <div
+                  className="border p-1 d-flex justify-content-center align-items-center"
+                  style={{ width: "2rem", height: "2rem" }}
+                >
+                  <MdOutlineAddBox />
                 </div>
-                <div style={{ width: "35px" }}>
-                  <Image className="w-100" src={BarmouLogo} />
-                </div>
-              </div>
-              <div className="d-flex justify-content-center">
-                <div>
-                  <div className="" style={{ height: "6rem", width: "6rem" }}>
-                    <Image className="w-100" src={QRCode} />
-                  </div>
-                  <h6 className="text-center">Tap or Scan</h6>
+
+                <div className="px-2">
+                  <p className="p-0 m-0 _font-s">Pay cash to delivery partner or waiter.</p>
+                  <p className="p-0 m-0 _font-s">
+                    <button
+                      className="_bg-col-voilet text-light rounded border-0 py-1"
+                      onClick={() => handleAddOrder("CashPay")}
+                    >
+                      Pay with Cash
+                    </button>
+                  </p>
                 </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-      {/* <Modal show={show} fullscreen={true}>
-        <Modal.Body className="d-flex align-items-center justify-content-center h-100">
-          {isOrderAccepted ? (
-            <div className="text-center">
-              <IoBagCheckOutline size={150} className="_text-light-green" />
-              <h3 className="mt-3">Thank You!</h3>
-              <p>Your order is references ORID 188747393 please check your screen at front desk for pickup</p>
-              <h1 className="mt-4">K920</h1>
-              <button className='p-2 px-4 rounded bg_brown border-0 shadow-lg'><h2 className='m-0'>Thank You</h2></button>
-            </div>
-          ) : (
-            <div className="text-center">
-              <ImCross
-                size={40}
-                className="text-light bg-danger rounded-circle p-2"
-              />
-              <h4 className="text-muted p-0 m-0 py-3">Order Rejected</h4>
-            </div>
-          )}
-        </Modal.Body>
-      </Modal> */}
-      {show && <OrderSuccessMessageModal isOrderAccepted={isOrderAccepted} />}
+      {show && <OrderSuccessMessageModal ordersMessage={ordersMessage} isOrderAccepted={isOrderAccepted} />}
     </>
   );
 };

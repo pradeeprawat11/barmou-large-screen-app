@@ -7,6 +7,8 @@ const initialState = {
     : [],
     cartTotalQuantity: 0,
     cartTotalAmout: 0,
+    cartTotalVat:0,
+    cardNetAmount:0,
 };
 
 const cartSlice = createSlice({
@@ -69,24 +71,32 @@ const cartSlice = createSlice({
         },
 
         getTotal(state, action) {
-            let {total, quantity} = state.cartItems.reduce(
+            let {total, quantity, totalVat} = state.cartItems.reduce(
                 (cartTotal, cartItem) => {
-                const { price, quantity} = cartItem;
+                    
+                const { price, quantity, vat} = cartItem;
+                console.log(vat)
                 const itemTotal = price * quantity;
-
                 cartTotal.total += itemTotal
                 cartTotal.quantity += quantity
+
+                if(vat != undefined){
+                    cartTotal.totalVat += Number((Math.floor(quantity*vat * 100) / 100));
+                }
+         
 
                 return cartTotal
             }, 
             {
                 total: 0,
-                quantity: 0
+                quantity: 0,
+                totalVat:0
             }
           );
-
           state.cartTotalQuantity = quantity;
-          state.cartTotalAmout = total
+          state.cartTotalAmout = total;
+          state.cartTotalVat = Number((Math.floor(totalVat * 100) / 100));
+          state.cardNetAmount = (total - totalVat).toFixed(2);
         }
     },
 });

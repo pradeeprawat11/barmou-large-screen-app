@@ -31,8 +31,8 @@ const MenuItemCustomizeModal = (props) => {
     </div>
     <Modal.Body className="modal_body d-flex justify-content-center">
       <div className='_model-content text-center'>
-        <h1> <strong>Classic Burger</strong></h1>
-        <h6>Classic bread with pattie of two slices</h6>
+        <h1> <strong>{props.data.name}</strong></h1>
+        <h6>{props.data.description}</h6>
         <div className='d-flex justify-content-between mt-3'>
           <div className='d-flex align-items-center'>
             <input className='rounded-circle mx-1' type="checkbox" />
@@ -84,7 +84,7 @@ const MenuItemCustomizeModal = (props) => {
           <FaMinus onClick={()=>props.menuFunctionProps.handleDecreseFromCart(props.data._id)} className='mx-2 bg_red rounded-circle p-1 text-light cursor_pointer' size={20} />
           <p className='m-0 mx-2'>{props.menuFunctionProps.getQuantity(props.data._id)}</p>
           <FaPlus onClick={()=>props.menuFunctionProps.handleAddToCart(props.data)} className='mx-2 bg_red rounded-circle p-1 text-light cursor_pointer' size={20} />
-          <p size={10} className='m-0 mx-2'>
+          <p size={10} className='m-0 mx-2'>€ 
             {(props.menuFunctionProps.getQuantity(props.data._id) * props.data.price % 1) !== 0
             ? (props.menuFunctionProps.getQuantity(props.data._id) * props.data.price).toFixed(2)
             : props.menuFunctionProps.getQuantity(props.data._id) * props.data.price}
@@ -92,7 +92,7 @@ const MenuItemCustomizeModal = (props) => {
         </div> 
         :
         <div className="buy-now-buttton rounded-3 p-1 d-flex align-items-center text-light">
-          <h5 onClick={()=>props.menuFunctionProps.handleAddToCart(props.data)} className="p-0 m-0">Buy Now</h5>
+          <h5 onClick={()=>props.menuFunctionProps.handleAddToCart(props.data)} className="p-0 m-0 cursor_pointer">Add</h5>
         </div>}
       </footer>
     </Modal.Body>

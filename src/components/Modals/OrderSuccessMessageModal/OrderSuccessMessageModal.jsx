@@ -12,8 +12,7 @@ const OrderSuccessMessageModal = (props) => {
             <div className="text-center">
               <IoBagCheckOutline size={150} className="_text-light-green" />
               <h3 className="mt-3">Thank You!</h3>
-              <p>Your order is references ORID 188747393 please check your screen at front desk for pickup</p>
-              <h1 className="mt-4">K920</h1>
+              <h4>{props.ordersMessage}</h4>
               <button className='p-2 px-4 rounded bg_brown border-0 shadow-lg'><h2 className='m-0'>Thank You</h2></button>
             </div>
           ) : (
@@ -22,7 +21,7 @@ const OrderSuccessMessageModal = (props) => {
                 size={40}
                 className="text-light bg-danger rounded-circle p-2"
               />
-              <h4 className="text-muted p-0 m-0 py-3">Order Rejected</h4>
+              {<h4 className="text-muted p-0 m-0 py-3">{props.ordersMessage ? props.ordersMessage : 'Order Not Placed'}</h4>}
             </div>
           )}
         </Modal.Body>
