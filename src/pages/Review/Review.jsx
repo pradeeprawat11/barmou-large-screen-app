@@ -3,7 +3,6 @@ import { RxCross2 } from "react-icons/rx";
 import { IoIosStar } from "react-icons/io";
 import './Review.css'
 import { useNavigate } from "react-router-dom";
-import reviewData from './demoData'
 
 import {
   getAssetInfo as onGetAssetInfo
