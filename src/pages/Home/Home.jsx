@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import { IoChevronDownSharp } from "react-icons/io5";
 import { useNavigate } from "react-router-dom";
-import { Image } from 'react-bootstrap';
+import { Image, Row, Col, Dropdown } from "react-bootstrap";
 import './Home.css'
 import BarmouLogo from '../../assets/images/barmou-logo.png'
 import PlateLogo from '../../assets/images/plate-fastfood.png'
 import { useSelector, useDispatch } from "react-redux";
+import GrLogo from "../../assets/images/greece.png";
+import EnLogo from "../../assets/images/united-kingdom.png";
 import {
   getAssetInfo as onGetAssetInfo,
 } from "../../slices/thunks";
@@ -15,6 +17,7 @@ const Home = () => {
   const dispatch = useDispatch();
   const [assetId, setAssetId] = useState();
   const [assetInfo, setAssetInfo] = useState({});
+  const [selectedLogo, setSelectedLogo] = useState(EnLogo);
 
   const { asset } =
     useSelector((state) => ({
@@ -56,7 +59,8 @@ const Home = () => {
       <div className='home-main-container text-light p-5 position-relative'>
         <div className="d-flex align-items-center">
           <div className="select-language-icon rounded-circle overflow-hidden  _cursor-pointer">
-            <Image className="_obj-fit-cover h-100 w-100" src='https://source.unsplash.com/random/?flag' />
+          <Image className="_obj-fit-cover h-100 w-100" src={GrLogo} />
+           
           </div>
           <IoChevronDownSharp className="header-gray mx-1" />
         </div>

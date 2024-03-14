@@ -1,12 +1,14 @@
 import React, { useEffect, useState, useRef } from "react";
 import "../../assets/styles/Menu.css";
 import { useNavigate } from "react-router-dom";
-import { Image, Row, Col } from "react-bootstrap";
+import { Image, Row, Col, Dropdown } from "react-bootstrap";
 import { CiEdit } from "react-icons/ci";
 import { PiHandbagSimple } from "react-icons/pi";
 import { IoChevronDownSharp } from "react-icons/io5";
 import MenuItemCustomizeModal from "../../components/Modals/MenuItemCustomizeModal/MenuItemCustomizeModal";
 import { useSelector, useDispatch } from "react-redux";
+import GrLogo from "../../assets/images/greece.png";
+import EnLogo from "../../assets/images/united-kingdom.png";
 import {
   getMenu as onGetMenu,
   getCategories as onGetCategories,
@@ -210,7 +212,7 @@ const Menu = () => {
           <header className="d-flex justify-content-between p-1 px-4">
             <div className="d-flex align-items-center">
               <div className="nav-language-icon rounded-circle overflow-hidden  _cursor-pointer">
-                <Image className="_obj-fit-cover h-100 w-100" src='https://source.unsplash.com/random/?flag' />
+              <Image className="_obj-fit-cover h-100 w-100" src={GrLogo} />
               </div>
               <IoChevronDownSharp className="header-gray mx-1" />
             </div>
