@@ -67,10 +67,13 @@ const Home = () => {
         <div className='barmou-logo-container text-center'>
           <Image className="h-100 cursor_pointer" src={assetInfo.floorPlanImage} />
         </div>
+        <div className='barmou-logo-container text-center'>
+        {assetInfo.name}
+        </div>
         <h1>€<strong>3,00</strong></h1>
         <h4><strong>EAT & COFFEE</strong></h4>
         <div className='d-flex my-4'>
-          <button onClick={handleDineInClick} className='border-0 p-3 rounded-pill'><strong>Dine in</strong></button>
+          {/* <button onClick={handleDineInClick} className='border-0 p-3 rounded-pill'><strong>Dine in</strong></button> */}
           <button onClick={handleTakeAwayClick} className='border-0 p-3 rounded-pill mx-3'><strong>Takeaway</strong></button>
         </div>
         <h4>

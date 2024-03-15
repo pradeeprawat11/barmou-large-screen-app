@@ -33,7 +33,7 @@ const MenuItemCustomizeModal = (props) => {
       <div className='_model-content text-center'>
         <h1> <strong>{props.data.name}</strong></h1>
         <h6>{props.data.description}</h6>
-        <div className='d-flex justify-content-between mt-3'>
+        {/* <div className='d-flex justify-content-between mt-3'>
           <div className='d-flex align-items-center'>
             <input className='rounded-circle mx-1' type="checkbox" />
             <h5 className="m-0">Original</h5>
@@ -42,7 +42,7 @@ const MenuItemCustomizeModal = (props) => {
             <input className='rounded-circle mx-1' type="checkbox" />
             <h5 className="m-0">Zinger</h5>
           </div>
-        </div>
+        </div> */}
         <div>
           <h5 className='text-start fw-bold mt-3'>Condiments</h5>
           <div className='d-flex justify-content-between'>
