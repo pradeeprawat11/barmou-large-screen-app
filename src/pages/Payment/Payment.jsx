@@ -29,7 +29,7 @@ import TipIcon from "../../assets/images/tip.png";
 import OrderSuccessMessageModal from '../../components/Modals/OrderSuccessMessageModal/OrderSuccessMessageModal'
 
 const Payment = () => {
-  const { cartItems, cartTotalAmout, orderStatusCode, cart, cartTotalVat, cardNetAmount,orderMessage } = useSelector(
+  const { cartItems, cartTotalAmout, orderStatusCode, cart, cartTotalVat, cardNetAmount,orderMessage,orderInfo } = useSelector(
     (state) => ({
       cart: state.cart,
       cartItems: state.cart.cartItems,
@@ -38,6 +38,7 @@ const Payment = () => {
       cartTotalVat: state.cart.cartTotalVat,
       orderStatusCode: state.orders.orderStatusCode,
       orderMessage: state.orders.orderMessage,
+      orderInfo:state.orders.orderInfo
     })
   );
 
@@ -46,6 +47,7 @@ const Payment = () => {
   const [show, setShow] = useState(false);
   const [assetInfo, setAssetInfo] = useState('');
   const [ordersMessage, setOrderMessage] = useState('');
+  const [orderData, setOrderData] = useState({});
   const [instruction, setInstruction] = useState('');
   const [tipsData, setTipAmount] = useState({});
   const [open, setOpen] = useState(false);
@@ -91,6 +93,7 @@ const Payment = () => {
       setShow(true);
       if (orderStatusCode === 200) {
         setOrderMessage(orderMessage);
+        setOrderData(orderInfo);
         setIsOrderAccepted(true);
         dispatch(clearCart());
         const timeoutId = setTimeout(() => {

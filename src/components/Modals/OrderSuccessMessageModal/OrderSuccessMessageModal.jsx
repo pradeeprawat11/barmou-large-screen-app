@@ -4,6 +4,7 @@ import { IoBagCheckOutline } from "react-icons/io5";
 import { ImCross } from "react-icons/im";
 
 const OrderSuccessMessageModal = (props) => {
+  console.log(props)
   return (
     <>
     <Modal show={true} fullscreen={true}>
