@@ -1,53 +1,47 @@
+* {
+  font-family: "Montserrat", sans-serif;
+}
+
 ._bottom-shadow {
-    box-shadow: 0px 2px 4px 898989;
+  box-shadow: 0px 2px 4px 898989;
 }
 
 ._rounded-medium {
-    border-radius: 20px;
+  border-radius: 20px;
 }
 
 ._cursor-pointer {
-    cursor: pointer;
+  cursor: pointer;
 }
 
 ._bg-light-voilet {
-    background-color: #3e4e88;
+  background-color: #3e4e88;
 }
 
 ._text-light-green {
-    color: #12be14;
+  color: #12be14;
 }
 
 ._obj-fit-cover {
-    object-fit: cover;
+  object-fit: cover;
 }
 
 .cursor_pointer {
-    cursor: pointer;
+  cursor: pointer;
 }
 
 .bg_brown {
-    background-color: #b06621;
+  background-color: #983426;
+}
+
+.border_brown {
+  background-color: #983426;
 }
 
 .bg_lightgray {
-    background-color: #acacac;
+  background-color: #acacac;
 }
 
-.sm-screen-component {
-    display: block;
-}
-
-.lg-screen-component {
-    display: none;
-}
-
-@media only screen and (min-width: 500px) {
-    .sm-screen-component {
-        display: none;
-    }
-
-    .lg-screen-component {
-        display: block;
-    }
+.pb_5 {
+  padding-bottom: 10rem;
 }

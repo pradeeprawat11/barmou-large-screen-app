@@ -13,7 +13,8 @@ const OrderSuccessMessageModal = (props) => {
             <div className="text-center">
               <IoBagCheckOutline size={150} className="_text-light-green" />
               <h3 className="mt-3">Thank You!</h3>
-              <h4>{props.ordersMessage}</h4>
+              <h4 className='text-muted'>Your order is referenced {props.orderInfo.orderNumber} please check your screen at front desk for pickup</h4>
+              <h2 className='mt-5 fw-bold'>{props.orderInfo.orderNumber}</h2>
               <button className='p-2 px-4 rounded bg_brown border-0 shadow-lg'><h2 className='m-0'>Thank You</h2></button>
             </div>
           ) : (

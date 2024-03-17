@@ -1,11 +1,10 @@
 import { Routes, BrowserRouter, Route } from 'react-router-dom';
-import './App.css';
+import './assets/styles/Global.css'
 import Home from './pages/Home/Home';
 import Menu from './pages/Menu/Menu';
 import Payment from './pages/Payment/Payment';
 import Review from './pages/Review/Review'
-import './assets/styles/Global.css'
-import 'react-toastify/dist/ReactToastify.css';
+// import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
   return (

@@ -29,20 +29,10 @@ const MenuItemCustomizeModal = (props) => {
         fluid
       />
     </div>
-    <Modal.Body className="modal_body d-flex justify-content-center">
+    <Modal.Body className="modal_body d-flex justify-content-center align-items-center">
       <div className='_model-content text-center'>
         <h1> <strong>{props.data.name}</strong></h1>
         <h6>{props.data.description}</h6>
-        {/* <div className='d-flex justify-content-between mt-3'>
-          <div className='d-flex align-items-center'>
-            <input className='rounded-circle mx-1' type="checkbox" />
-            <h5 className="m-0">Original</h5>
-          </div>
-          <div className='d-flex align-items-center'>
-            <input className='rounded-circle mx-1' type="checkbox" />
-            <h5 className="m-0">Zinger</h5>
-          </div>
-        </div> */}
         <div>
           <h5 className='text-start fw-bold mt-3'>Condiments</h5>
           <div className='d-flex justify-content-between'>
@@ -76,23 +66,23 @@ const MenuItemCustomizeModal = (props) => {
         </div>
       </div>
       <footer className="d-flex justify-content-between align-items-center p-3 position-absolute bg-light">
-        <h4 onClick={props.onClick} className='cursor_pointer'>Back</h4>
         {props.menuFunctionProps.isInCart(props.data._id) &&
         <div onClick={handlePaymentClick} className="foot-payment-button p-2 rounded-pill text-light px-3 cursor_pointer"> <h4 className="p-0 m-0"> Continue To Payment </h4></div>}
+        <h4 onClick={props.onClick} className='cursor_pointer'>Add More Items</h4>
         {props.menuFunctionProps.isInCart(props.data._id) ?
         <div className='d-flex align-items-center'>
           <FaMinus onClick={()=>props.menuFunctionProps.handleDecreseFromCart(props.data._id)} className='mx-2 bg_red rounded-circle p-1 text-light cursor_pointer' size={20} />
           <p className='m-0 mx-2'>{props.menuFunctionProps.getQuantity(props.data._id)}</p>
           <FaPlus onClick={()=>props.menuFunctionProps.handleAddToCart(props.data)} className='mx-2 bg_red rounded-circle p-1 text-light cursor_pointer' size={20} />
-          <p size={10} className='m-0 mx-2'>€ 
+          <h5 size={10} className='m-0 mx-5'>€ 
             {(props.menuFunctionProps.getQuantity(props.data._id) * props.data.price % 1) !== 0
             ? (props.menuFunctionProps.getQuantity(props.data._id) * props.data.price).toFixed(2)
             : props.menuFunctionProps.getQuantity(props.data._id) * props.data.price}
-          </p>
+          </h5>
         </div> 
         :
         <div className="buy-now-buttton rounded-3 p-1 d-flex align-items-center text-light">
-          <h5 onClick={()=>props.menuFunctionProps.handleAddToCart(props.data)} className="p-0 m-0 cursor_pointer">Add</h5>
+          <h5 onClick={()=>props.menuFunctionProps.handleAddToCart(props.data)} className="p-0 m-0 cursor_pointer px-2">Add</h5>
         </div>}
       </footer>
     </Modal.Body>

@@ -10,6 +10,7 @@ export const initialState = {
     error: {},
     menuMsgResponse: {},
     menuAddUpdate: {},
+    menuStatusCode: null,
 }; 
 
 const menuSlice = createSlice({
@@ -20,15 +21,18 @@ const menuSlice = createSlice({
     
     // Get Menu
     builder.addCase(getMenu.fulfilled, (state, action) => {
+    state.menuStatusCode = action.payload.statusCode;
     state.menu = action.payload.data;
     })
     builder.addCase(getMenu.rejected, (state, action) => {
     state.error = action.payload || null;
+    state.menuStatusCode = 400;
     })
 
     // Menu Msg Res
     builder.addCase(resetMenuApiResponseFlag.fulfilled, (state, action) => {
     state.menuMsgResponse = { message: "" };
+    state.menuStatusCode = null;
     })
     },
 });

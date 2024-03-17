@@ -50,7 +50,7 @@ const Review = () => {
           <h2 className='m-0'>Rate us on</h2>
           <div className='d-flex align-items-center'>
             {Array.from({ length: 5 }, (_, i) => (
-              <IoIosStar size={20} className='text-warning mx-1' />
+              <IoIosStar key={i} size={20} className='text-warning mx-1' />
             ))}
           </div>
         </div>

@@ -29,11 +29,11 @@
 }
 
 ._model-content {
-    width: 25rem;
+    width: 50%;
 }
 
 ._model-img-container {
-    height: 40vh;
+    height: 60vh;
 }
 
 .minus_btn {

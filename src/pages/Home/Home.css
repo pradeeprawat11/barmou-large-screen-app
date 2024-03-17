@@ -13,10 +13,6 @@
     height: 10vh;
 }
 
-.home-main-container h1 {
-    font-size: 12vh;
-}
-
 button {
     background-color: #a23a18;
     color: white;
@@ -27,4 +23,12 @@ button {
     z-index: -1;
     right: 0rem;
     height: 70vh;
+}
+
+.info_contaier h1{
+    font-size: 10vw;
+}
+
+.info_contaier h4{
+    font-size: 3vw;
 }

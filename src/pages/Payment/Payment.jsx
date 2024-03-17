@@ -18,8 +18,7 @@ import {
 import { MdOutlineAddBox,MdDelete } from "react-icons/md";
 import { TbPointFilled } from "react-icons/tb";
 import { FaArrowLeft } from "react-icons/fa6";
-import "../../assets/styles/Payment.css";
-import "../../assets/styles/Global.css";
+import "./Payment.css";
 import { IoIosArrowDown } from "react-icons/io";
 import RevoultIcon from "../../assets/images/revoult-icon.png";
 import AppleIcon from "../../assets/images/apple-pay.png";
@@ -47,7 +46,6 @@ const Payment = () => {
   const [show, setShow] = useState(false);
   const [assetInfo, setAssetInfo] = useState('');
   const [ordersMessage, setOrderMessage] = useState('');
-  const [orderData, setOrderData] = useState({});
   const [instruction, setInstruction] = useState('');
   const [tipsData, setTipAmount] = useState({});
   const [open, setOpen] = useState(false);
@@ -64,7 +62,7 @@ const Payment = () => {
     setTipAmount({tip:tip,tipAmount:tipAmount,totaAmount:totaAmount+tipAmount})
   };
 
-  const removeTip = (tip,totaAmount) => {
+  const removeTip = () => {
     setTipAmount({})
   };
 
@@ -93,14 +91,12 @@ const Payment = () => {
       setShow(true);
       if (orderStatusCode === 200) {
         setOrderMessage(orderMessage);
-        setOrderData(orderInfo);
         setIsOrderAccepted(true);
         dispatch(clearCart());
         const timeoutId = setTimeout(() => {
           dispatch(onResetOrderApiResponseFlag());
           navigate(`/review`);
-        }, 2000);
-        // Cleanup the timeout to avoid memory leaks
+        }, 3000);
         return () => clearTimeout(timeoutId);
       } else {
         setOrderMessage(orderMessage);
@@ -440,7 +436,6 @@ const Payment = () => {
                 >
                   <MdOutlineAddBox />
                 </div>
-
                 <div className="px-2">
                   <p className="p-0 m-0 _font-s">Pay cash to delivery partner or waiter.</p>
                   <p className="p-0 m-0 _font-s">
@@ -457,7 +452,7 @@ const Payment = () => {
           </div>
         </div>
       </div>
-      {show && <OrderSuccessMessageModal ordersMessage={ordersMessage} isOrderAccepted={isOrderAccepted} />}
+      {show && <OrderSuccessMessageModal orderInfo={orderInfo} ordersMessage={ordersMessage} isOrderAccepted={isOrderAccepted} />}
     </>
   );
 };
