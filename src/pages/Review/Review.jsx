@@ -24,7 +24,7 @@ const Review = () => {
       dispatch(onGetAssetInfo({ assetId: assetId }));
     }
     const timeoutId = setTimeout(() => {
-      navigate(`/menu?assetId=${assetId}`)
+      navigate(`/?assetId=${assetId}`)
     }, 3000);
     return () => clearTimeout(timeoutId);
   }, [assetId, dispatch]);
