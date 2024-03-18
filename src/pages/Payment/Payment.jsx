@@ -142,6 +142,10 @@ const Payment = () => {
     dispatch(onAddNotification(payload))
   };
 
+  const handlePropsThankYouClick = () => {
+    dispatch(onResetOrderApiResponseFlag());
+  }
+  
   return (
     <>
       <div className="d-flex justify-content-center p-4 px-lg-5">
@@ -452,7 +456,7 @@ const Payment = () => {
           </div>
         </div>
       </div>
-      {show && <OrderSuccessMessageModal orderInfo={orderInfo} ordersMessage={ordersMessage} isOrderAccepted={isOrderAccepted} />}
+      {show && <OrderSuccessMessageModal orderInfo={orderInfo} ordersMessage={ordersMessage} isOrderAccepted={isOrderAccepted} handlePropsThankYouClick={handlePropsThankYouClick} />}
     </>
   );
 };

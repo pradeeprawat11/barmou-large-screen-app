@@ -30,7 +30,7 @@ const Review = () => {
   }, [assetId, dispatch]);
 
   const handleBackClick = () => {
-    navigate(`/menu?assetId=${assetId}`)
+    navigate(`/?assetId=${assetId}`)
   }
 
   const { asset } =

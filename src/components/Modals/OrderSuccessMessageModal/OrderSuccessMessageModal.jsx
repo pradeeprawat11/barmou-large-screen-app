@@ -1,9 +1,25 @@
-import React from 'react'
+import React, {useEffect, useState} from 'react'
 import { Modal } from 'react-bootstrap'
 import { IoBagCheckOutline } from "react-icons/io5";
 import { ImCross } from "react-icons/im";
+import { useNavigate } from "react-router-dom";
 
 const OrderSuccessMessageModal = (props) => {
+
+  const navigate = useNavigate();
+  const [assetId, setAssetId] = useState("");
+
+  useEffect(()=> {
+    setAssetId(localStorage.getItem("assetId"));
+  }, [])
+
+  const handleThankYouClick = () => {
+    props.handlePropsThankYouClick();
+    if(assetId) {
+      navigate(`/?assetId=${assetId}`);
+    }
+  };
+
   return (
     <>
     <Modal show={true} fullscreen={true}>
@@ -14,7 +30,7 @@ const OrderSuccessMessageModal = (props) => {
               <h3 className="mt-3">Thank You!</h3>
               <h4 className='text-muted'>Your order is referenced {props.orderInfo.orderNumber} please check your screen at front desk for pickup</h4>
               <h2 className='mt-5 fw-bold'>{props.orderInfo.orderNumber}</h2>
-              <button className='p-2 px-4 rounded bg_brown border-0 shadow-lg'><h2 className='m-0'>Thank You</h2></button>
+              <button onClick={handleThankYouClick}  className='p-2 px-4 rounded bg_brown border-0 shadow-lg'><h2 className='m-0'>Thank You</h2></button>
             </div>
           ) : (
             <div className="text-center">
