@@ -23,10 +23,6 @@ const Review = () => {
     if(assetId !== null) {
       dispatch(onGetAssetInfo({ assetId: assetId }));
     }
-    const timeoutId = setTimeout(() => {
-      navigate(`/?assetId=${assetId}`)
-    }, 3000);
-    return () => clearTimeout(timeoutId);
   }, [assetId, dispatch]);
 
   const handleBackClick = () => {
