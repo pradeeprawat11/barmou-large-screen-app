@@ -37,7 +37,8 @@ const Home = () => {
   }, [dispatch])
 
   useEffect(()=> {
-    setMenuItem(menu[0]);
+    if (menu)
+      setMenuItem(menu[0]);
   }, [menu])
 
   setTimeout(function () {
