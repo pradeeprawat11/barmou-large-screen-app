@@ -56,9 +56,9 @@ const Review = () => {
         </div>
           {(asset && asset.length > 0) &&
             (asset[0].venueInfo.review.map((review, index) => (
-          <div key={index} className='d-flex justify-content-between align-items-center my-3'>
+          <div key={index} onClick={()=>handleReviewClick(review.link)} className='d-flex justify-content-between align-items-center my-3  cursor_pointer'>
             <div className='brand_logo_img_container'>
-              <h4 onClick={()=>handleReviewClick(review.link)} className='m-0 cursor_pointer'>{review.name}</h4>
+              <h4 className='m-0'>{review.name}</h4>
             </div>
             <div>
               {Array.from({ length: review.rating }, (_, i) => (
