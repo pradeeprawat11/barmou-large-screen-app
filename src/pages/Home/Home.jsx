@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { IoChevronDownSharp } from "react-icons/io5";
 import { useNavigate } from "react-router-dom";
-import { Image } from "react-bootstrap";
+import { Dropdown, Image } from "react-bootstrap";
 import './Home.css'
 import { useSelector, useDispatch } from "react-redux";
 import GrLogo from "../../assets/images/greece.png";
@@ -58,12 +58,17 @@ const Home = () => {
   return (
     <>
       <div className='home-main-container text-light p-5 position-relative'>
-        <div className="d-flex align-items-center">
-          <div className="select-language-icon rounded-circle overflow-hidden  _cursor-pointer">
-          <Image className="_obj-fit-cover h-100 w-100" src={GrLogo} />
-          </div>
-          <IoChevronDownSharp className="header-gray mx-1" />
-        </div>
+        <Dropdown>
+          <Dropdown.Toggle className='bg-transparent border-0 d-flex align-items-center' id="dropdown-basic">
+            <div className="select-language-icon rounded-circle overflow-hidden  _cursor-pointer">
+              <Image className="_obj-fit-cover h-100 w-100" src={GrLogo} />
+            </div>
+          </Dropdown.Toggle>
+          <Dropdown.Menu>
+            <Dropdown.Item>English</Dropdown.Item>
+            <Dropdown.Item>Greek</Dropdown.Item>
+          </Dropdown.Menu>
+        </Dropdown>
         <div className='barmou-logo-container text-center'>
           <Image className="h-100 cursor_pointer" src={assetInfo.floorPlanImage} />
         </div>
@@ -77,7 +82,12 @@ const Home = () => {
             <div className='d-flex my-4'>
               <button onClick={handleTakeAwayClick} className='border-0 p-3 rounded-pill mx-3'><h4>Takeaway</h4></button>
             </div>
-            <Image onClick={handleTakeAwayClick} className='home-bg-food-image position-absolute cursor_pointer' src={menuItem ? menuItem.image : ''} />
+            <div className='video-container' onClick={handleTakeAwayClick} >
+              <video loop autoPlay muted className='home-bg-food-video cursor_pointer'>
+                <source src={menuItem ? menuItem.video : 'https://dm0qx8t0i9gc9.cloudfront.net/watermarks/video/rnIdPf4Piqlaar11/videoblocks-crispy-rustic-potatoes-with-cuts-burger-and-red-sauce-on-wooden-board-close-up-fast-food-concept-with-no-people_bpzotaclvu__9e1caf9baccd7c330aa32475c6cad199__P360.mp4'} type='video/mp4' />
+                Your browser does not support the video.
+              </video>
+            </div>
           </div>
         </div>
       </div>

@@ -18,11 +18,19 @@ button {
     color: white;
 }
 
-.home-bg-food-image{
+.video-container {
+    position: absolute;
     bottom: 0;
+    text-align: center;
+    display: flex;
+    right: 0;
+    text-align: center;
+}
+
+.home-bg-food-video{
     z-index: -1;
-    right: 0rem;
-    height: 70vh;
+    border-radius: 25rem 25rem 0 0;
+    bottom: 0;
 }
 
 .info_contaier h1{
