@@ -1,6 +1,6 @@
 import React from 'react'
 import { IoChevronDownSharp } from "react-icons/io5";
-import { Image } from 'react-bootstrap';
+import { Dropdown, Image } from 'react-bootstrap';
 import GrLogo from "../../assets/images/greece.png";
 import './Header.css'
 import { useNavigate } from 'react-router-dom';
@@ -24,13 +24,18 @@ const Header = (props) => {
 
   return (
     <>
-    <header className="d-flex justify-content-between p-1 px-4">
-            <div className="d-flex align-items-center">
+        <header className="d-flex justify-content-between align-items-center p-1 px-4">
+            <Dropdown>
+              <Dropdown.Toggle className='bg-transparent border-0 d-flex align-items-center' id="dropdown-basic">
                 <div className="nav-language-icon rounded-circle overflow-hidden  _cursor-pointer">
-                <Image className="_obj-fit-cover h-100 w-100" src={GrLogo} />
+                  <Image className="_obj-fit-cover h-100 w-100" src={GrLogo} />
                 </div>
-                <IoChevronDownSharp className="header-gray mx-1" />
-            </div>
+              </Dropdown.Toggle>
+              <Dropdown.Menu>
+                <Dropdown.Item>English</Dropdown.Item>
+                <Dropdown.Item>Greek</Dropdown.Item>
+              </Dropdown.Menu>
+            </Dropdown>
             <div className="nav-info d-flex align-items-center position-relative">
                 {props.totalAmount ?
                 <>
